@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Become a donor · BloodLink</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c62828' d='M12 2s7 7.6 7 13a7 7 0 0 1-14 0c0-5.4 7-13 7-13z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/motion.js" defer></script>
+</head>
+<body>
+  <header class="lp-header">
+    <a class="lp-brand" href="index.html">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2s7 7.6 7 13a7 7 0 0 1-14 0c0-5.4 7-13 7-13z"/></svg>
+      BloodLink
+    </a>
+    <nav class="lp-nav" aria-label="Main">
+      <a class="lp-link lp-desktop" href="index.html#how">How it works</a>
+      <a class="lp-link" href="login.html">Hospital login</a>
+      <a class="lp-btn lp-btn-red lp-desktop" href="donate.html" aria-current="page">Become a donor</a>
+    </nav>
+  </header>
+
+  <main class="auth">
+    <div class="auth-visual">
+      <img src="assets/img/step-register.jpg" alt="">
+      <p class="kicker">For donors</p>
+      <h1 data-split>Become a donor</h1>
+      <p class="lead">We'll only contact you when a nearby hospital urgently needs your blood group.</p>
+      <ul class="auth-points" data-stagger>
+        <li data-reveal="left"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Takes about a minute to sign up</li>
+        <li data-reveal="left"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Your phone number is never shown to hospitals</li>
+        <li data-reveal="left"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Can't help this time? Ignore the request, no pressure</li>
+      </ul>
+    </div>
+
+    <div class="auth-main">
+      <div class="auth-main-inner">
+        <div id="alert" class="alert" hidden></div>
+
+        <form id="donor-form" class="card" novalidate data-reveal="scale">
+          <h2>Your details</h2>
+          <p class="muted">Everything is required unless it says optional.</p>
+
+          <div class="form-field">
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required maxlength="100">
+            <span class="field-error" data-error-for="name"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="phone">Phone number</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required
+                   pattern="[+0-9 \(\)\-]{9,20}" aria-describedby="phone-hint">
+            <span class="hint" id="phone-hint">Include your country code, e.g. +233 24 123 4567. We never show it to hospitals.</span>
+            <span class="field-error" data-error-for="phone"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="blood_group">Blood group</label>
+            <select id="blood_group" name="blood_group" required>
+              <option value="">Choose…</option>
+            </select>
+            <span class="field-error" data-error-for="blood_group"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="area">Area or town</label>
+            <input id="area" name="area" type="text" autocomplete="address-level2" required maxlength="100">
+            <span class="field-error" data-error-for="area"></span>
+          </div>
+
+          <div class="form-field">
+            <span class="label">Your location <span class="optional">(recommended)</span></span>
+            <div class="location-row">
+              <button type="button" id="locate" class="btn btn-secondary">Use my location</button>
+              <span id="location-status" class="location-status" aria-live="polite">Helps us find you for requests nearby.</span>
+            </div>
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lng" id="lng">
+            <span class="field-error" data-error-for="lat"></span>
+          </div>
+
+          <div class="form-field">
+            <label for="last_donation_date">Last donation date <span class="optional">(optional)</span></label>
+            <input id="last_donation_date" name="last_donation_date" type="date" aria-describedby="ldd-hint">
+            <span class="hint" id="ldd-hint">Leave empty if you've never donated or don't remember.</span>
+            <span class="field-error" data-error-for="last_donation_date"></span>
+          </div>
+
+          <div class="form-field">
+            <label class="checkbox">
+              <input type="checkbox" name="consent" id="consent" required>
+              <span>I agree to be contacted for urgent requests.</span>
+            </label>
+            <span class="field-error" data-error-for="consent"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block lp-btn-lg">Register as a donor</button>
+        </form>
+
+        <p class="auth-switch">Work at a hospital? <a href="login.html">Log in here</a></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <a class="lp-brand" href="index.html">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2s7 7.6 7 13a7 7 0 0 1-14 0c0-5.4 7-13 7-13z"/></svg>
+        BloodLink
+      </a>
+      <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>BloodLink is a prototype. Any real donation still goes through a hospital or blood bank's normal screening.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/pages/donate.js"></script>
+</body>
+</html>

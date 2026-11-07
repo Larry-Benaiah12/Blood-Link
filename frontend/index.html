@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BloodLink</title>
+  <meta name="description" content="BloodLink matches hospitals with nearby, eligible blood donors in an emergency.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c62828' d='M12 2s7 7.6 7 13a7 7 0 0 1-14 0c0-5.4 7-13 7-13z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/motion.js" defer></script>
+</head>
+<body class="home">
+  <header class="lp-header">
+    <a class="lp-brand" href="index.html">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+      BloodLink
+    </a>
+    <nav class="lp-nav" aria-label="Main">
+      <a class="lp-link lp-desktop" href="#how">How it works</a>
+      <a class="lp-link lp-desktop" href="#hospitals">For hospitals</a>
+      <a class="lp-btn lp-btn-ghost lp-desktop" href="login.html">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v4"/><path d="M14 14h-4"/><path d="M14 18h-4"/><path d="M14 8h-4"/><path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"/></svg>
+        Hospital login
+      </a>
+      <a class="lp-btn lp-btn-red" href="donate.html">Become a donor</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="lp-hero">
+      <video class="lp-hero-media" autoplay muted loop playsinline preload="metadata" poster="assets/img/hero-poster.jpg" aria-hidden="true">
+        <source src="assets/video/hero.mp4" type="video/mp4">
+      </video>
+      <div class="lp-hero-shade" aria-hidden="true"></div>
+      <div class="lp-hero-copy">
+        <p class="lp-pill"><span class="lp-pill-dot" aria-hidden="true"></span>Emergency donor matching</p>
+        <h1 data-split>Find blood donors fast in an emergency.</h1>
+        <p class="lp-hero-lead">Donors sign up once. When a hospital needs blood, we find compatible, eligible donors nearby and let them know.</p>
+        <div class="lp-actions">
+          <a class="lp-btn lp-btn-red lp-btn-lg" href="donate.html">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+            Become a donor
+          </a>
+          <a class="lp-btn lp-btn-outline-light lp-btn-lg" href="login.html">Hospital login</a>
+        </div>
+      </div>
+      <span class="lp-scroll-cue" aria-hidden="true"></span>
+      <button class="lp-video-toggle" type="button" aria-label="Pause background video" hidden>
+        <svg class="icon icon-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+        <svg class="icon icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>
+      </button>
+    </section>
+
+    <!-- Stats -->
+    <section class="lp-stats" aria-label="Key facts" data-stagger>
+      <div class="lp-stat" data-reveal><strong><span data-count="1">1</span> minute</strong><span>to register as a donor</span></div>
+      <div class="lp-stat" data-reveal><strong><span data-count="8">8</span> groups</strong><span>blood types matched for compatibility</span></div>
+      <div class="lp-stat" data-reveal><strong><span data-count="90">90</span> days</strong><span>between donations, always respected</span></div>
+    </section>
+
+    <!-- Blood group ticker (decorative) -->
+    <div class="lp-ticker" aria-hidden="true">
+      <div class="lp-ticker-track">
+        <span>A+</span><span>A−</span><span>B+</span><span>B−</span><span>AB+</span><span>AB−</span><span>O+</span><span><em>O−</em></span><span>Every group counts</span>
+        <span>A+</span><span>A−</span><span>B+</span><span>B−</span><span>AB+</span><span>AB−</span><span>O+</span><span><em>O−</em></span><span>Every group counts</span>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <section class="lp-how" id="how" aria-labelledby="how-title">
+      <div class="lp-how-head" data-reveal>
+        <div>
+          <p class="lp-kicker">How it works</p>
+          <h2 id="how-title">From request to donor</h2>
+        </div>
+        <p class="lp-muted">Three simple steps connect a hospital in need with the people nearby who can help.</p>
+      </div>
+      <ol class="lp-steps" data-stagger>
+        <li class="lp-step" data-reveal>
+          <div class="lp-step-media"><img src="assets/img/step-register.jpg" alt="A health worker preparing a donor's arm" loading="lazy"></div>
+          <span class="lp-step-num" aria-hidden="true">01</span>
+          <div class="lp-step-body">
+            <h3>Donors register</h3>
+            <p>Blood group, phone number and rough location. It takes about a minute.</p>
+          </div>
+        </li>
+        <li class="lp-step" data-reveal>
+          <div class="lp-step-media"><img src="assets/img/step-hospital.jpg" alt="A doctor and nurse reviewing a patient chart" loading="lazy"></div>
+          <span class="lp-step-num" aria-hidden="true">02</span>
+          <div class="lp-step-body">
+            <h3>Hospitals ask</h3>
+            <p>A hospital posts what it needs and how urgent it is.</p>
+          </div>
+        </li>
+        <li class="lp-step" data-reveal>
+          <div class="lp-step-media"><img src="assets/img/step-match.jpg" alt="A smiling nurse in scrubs" loading="lazy"></div>
+          <span class="lp-step-num" aria-hidden="true">03</span>
+          <div class="lp-step-body">
+            <h3>We match</h3>
+            <p>Compatible donors who haven't given blood in the last 90 days, closest first.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- For donors -->
+    <section class="lp-split" aria-labelledby="donors-title">
+      <div class="lp-panel lp-panel-red">
+        <p class="lp-kicker">For donors</p>
+        <div class="lp-panel-body" data-reveal>
+          <h2 id="donors-title">One pint can help save lives.</h2>
+          <p>Sign up once with your blood group and rough location. We only reach out when someone nearby truly needs you.</p>
+          <a class="lp-btn lp-btn-white lp-btn-lg" href="donate.html">
+            Become a donor
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+      <img class="lp-split-img" data-parallax src="assets/img/donor.jpg" alt="A donor's arm during a blood donation" loading="lazy">
+    </section>
+
+    <!-- For hospitals -->
+    <section class="lp-split lp-split-reverse" id="hospitals" aria-labelledby="hospitals-title">
+      <div class="lp-split-media">
+        <img class="lp-split-img" data-parallax src="assets/img/hospital.jpg" alt="A nurse standing by a hospital emergency sign" loading="lazy">
+        <!-- Illustrative example only: hidden from assistive tech so it isn't read as real data. -->
+        <div class="lp-card" aria-hidden="true" data-observe data-tilt>
+          <div class="lp-card-head">
+            <span class="lp-caption">Example request · City General</span>
+            <span class="lp-badge">Critical</span>
+          </div>
+          <div class="lp-need">
+            <span class="lp-group">O−</span>
+            <div>
+              <div class="lp-units">3 units needed</div>
+              <div class="lp-muted">Posted 4 minutes ago</div>
+            </div>
+          </div>
+          <div class="lp-matches">
+            <span class="lp-caption">Matched donors nearby</span>
+            <div class="lp-donor">
+              <span><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Donor · O−</span>
+              <span class="lp-muted">1.2 km</span>
+            </div>
+            <div class="lp-donor">
+              <span><svg class="icon" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Donor · O−</span>
+              <span class="lp-muted">2.8 km</span>
+            </div>
+            <div class="lp-notified">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+              Donors notified
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lp-panel lp-panel-cream">
+        <p class="lp-kicker">For hospitals</p>
+        <div class="lp-panel-body" data-reveal>
+          <h2 id="hospitals-title">Need blood urgently?</h2>
+          <p>Post a request and reach compatible donors nearby.</p>
+          <a class="lp-btn lp-btn-red lp-btn-lg" href="login.html">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v4"/><path d="M14 14h-4"/><path d="M14 18h-4"/><path d="M14 8h-4"/><path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"/><path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"/></svg>
+            Hospital login
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA band -->
+    <section class="lp-cta" aria-labelledby="cta-title">
+      <div data-reveal>
+        <h2 id="cta-title">Someone nearby may need you today.</h2>
+        <p>It takes about a minute to sign up. You decide when to respond.</p>
+      </div>
+      <div class="lp-actions">
+        <a class="lp-btn lp-btn-white lp-btn-lg" href="donate.html">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>
+          Become a donor
+        </a>
+        <a class="lp-btn lp-btn-outline-light lp-btn-lg" href="login.html">Hospital login</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="lp-footer">
+    <p class="lp-wordmark" aria-hidden="true" data-split="chars" data-observe>BloodLink</p>
+    <div class="lp-footer-cols" data-stagger>
+      <div class="lp-footer-col" data-reveal>
+        <h2>Donors</h2>
+        <a href="donate.html">Become a donor</a>
+        <a href="#how">How it works</a>
+      </div>
+      <div class="lp-footer-col" data-reveal>
+        <h2>Hospitals</h2>
+        <a href="#hospitals">For hospitals</a>
+        <a href="login.html">Hospital login</a>
+      </div>
+      <div class="lp-footer-col lp-footer-note" data-reveal>
+        <h2>Please note</h2>
+        <p>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+          <span>BloodLink is a prototype. Any real donation still goes through a hospital or blood bank's normal screening.</span>
+        </p>
+      </div>
+    </div>
+    <div class="lp-footer-bottom">
+      <span>© 2026 BloodLink</span>
+      <span>Matching donors with hospitals, fast.</span>
+    </div>
+  </footer>
+</body>
+</html>

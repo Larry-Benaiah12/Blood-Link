@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thank you · BloodLink</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c62828' d='M12 2s7 7.6 7 13a7 7 0 0 1-14 0c0-5.4 7-13 7-13z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/motion.js" defer></script>
+</head>
+<body>
+  <header class="lp-header">
+    <a class="lp-brand" href="index.html">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2s7 7.6 7 13a7 7 0 0 1-14 0c0-5.4 7-13 7-13z"/></svg>
+      BloodLink
+    </a>
+    <nav class="lp-nav" aria-label="Main">
+      <a class="lp-link lp-desktop" href="index.html#how">How it works</a>
+      <a class="lp-link" href="login.html">Hospital login</a>
+    </nav>
+  </header>
+
+  <main class="celebrate">
+    <img src="assets/img/step-match.jpg" alt="">
+    <div class="hearts" aria-hidden="true">
+      <span style="--x:8%;  --s:14px; --d:7s;   --delay:.2s; --r:-25deg"></span>
+      <span style="--x:18%; --s:22px; --d:9s;   --delay:1.6s; --r:20deg"></span>
+      <span style="--x:30%; --s:12px; --d:6.5s; --delay:3s;  --r:-10deg"></span>
+      <span style="--x:44%; --s:18px; --d:8s;   --delay:.8s; --r:35deg"></span>
+      <span style="--x:57%; --s:10px; --d:7.5s; --delay:2.4s; --r:-30deg"></span>
+      <span style="--x:68%; --s:24px; --d:10s;  --delay:.4s; --r:15deg"></span>
+      <span style="--x:79%; --s:14px; --d:7s;   --delay:3.6s; --r:-20deg"></span>
+      <span style="--x:90%; --s:18px; --d:8.5s; --delay:1.2s; --r:25deg"></span>
+    </div>
+
+    <div class="celebrate-card">
+      <div class="drop-wrap" aria-hidden="true">
+        <svg class="drop-fill" viewBox="0 0 24 30">
+          <defs>
+            <clipPath id="drop-clip"><path d="M12 1s9 9.8 9 16.6A9 9 0 0 1 3 17.6C3 10.8 12 1 12 1z"/></clipPath>
+          </defs>
+          <g clip-path="url(#drop-clip)">
+            <g class="drop-liquid">
+              <path class="drop-wave" fill="#c62828" d="M-12 8 q3 -2.4 6 0 t6 0 t6 0 t6 0 t6 0 t6 0 t6 0 V40 H-12 Z"/>
+            </g>
+          </g>
+          <path class="drop-outline" d="M12 1s9 9.8 9 16.6A9 9 0 0 1 3 17.6C3 10.8 12 1 12 1z"/>
+        </svg>
+      </div>
+      <p class="lp-pill" role="status"><span class="lp-pill-dot" aria-hidden="true"></span>You're registered. Thank you!</p>
+      <h1 data-split>Thanks for signing up to donate.</h1>
+      <p>When a hospital near you needs your blood group, we'll send you a message. You don't need to do anything else for now.</p>
+      <p class="muted">Feeling unwell, travelling, or just donated? Simply ignore a request. There's no pressure.</p>
+      <div class="actions">
+        <a class="lp-btn lp-btn-white lp-btn-lg" href="index.html">Back to home</a>
+        <a class="lp-btn lp-btn-outline-light lp-btn-lg" href="index.html#how">How it works</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <a class="lp-brand" href="index.html">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2s7 7.6 7 13a7 7 0 0 1-14 0c0-5.4 7-13 7-13z"/></svg>
+        BloodLink
+      </a>
+      <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>BloodLink is a prototype. Any real donation still goes through a hospital or blood bank's normal screening.</p>
+    </div>
+  </footer>
+</body>
+</html>
