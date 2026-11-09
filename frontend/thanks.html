@@ -4,7 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Thank you · BloodLink</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c62828' d='M12 2s7 7.6 7 13a7 7 0 0 1-14 0c0-5.4 7-13 7-13z'/%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#c62828">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="BloodLink">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="application-name" content="BloodLink">
+  <script src="js/pwa.js" defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700;800&display=swap">
@@ -19,7 +29,8 @@
     </a>
     <nav class="lp-nav" aria-label="Main">
       <a class="lp-link lp-desktop" href="index.html#how">How it works</a>
-      <a class="lp-link" href="login.html">Hospital login</a>
+      <a class="lp-link lp-desktop" href="login.html">Hospital login</a>
+      <button type="button" class="lp-link" data-logout>Sign out</button>
     </nav>
   </header>
 
@@ -54,6 +65,40 @@
       <h1 data-split>Thanks for signing up to donate.</h1>
       <p>When a hospital near you needs your blood group, we'll send you a message. You don't need to do anything else for now.</p>
       <p class="muted">Feeling unwell, travelling, or just donated? Simply ignore a request. There's no pressure.</p>
+
+      <!-- Registration slip (filled in by js/pages/thanks.js) -->
+      <section class="slip" id="slip" aria-labelledby="slip-title" hidden>
+        <header class="slip-head">
+          <div class="slip-brand">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2s7 7.6 7 13a7 7 0 0 1-14 0c0-5.4 7-13 7-13z"/></svg>
+            <span>BloodLink</span>
+          </div>
+          <span class="slip-kind" id="slip-title">Donor registration slip</span>
+        </header>
+        <div class="slip-id">
+          <div>
+            <span class="slip-label">Donor ID</span>
+            <strong id="slip-code"></strong>
+          </div>
+          <div class="slip-group">
+            <span class="slip-label">Blood group</span>
+            <strong id="slip-group"></strong>
+          </div>
+        </div>
+        <dl class="slip-details" id="slip-details"></dl>
+        <p class="slip-note">Take this slip and a valid photo ID to the hospital or blood bank. Final eligibility is confirmed at screening.</p>
+        <div class="slip-actions">
+          <button type="button" class="lp-btn lp-btn-red" id="slip-pdf">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Download slip (PDF)
+          </button>
+          <button type="button" class="lp-btn lp-btn-ghost slip-print" id="slip-print">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print
+          </button>
+        </div>
+        <p class="slip-error" id="slip-error" role="alert" hidden></p>
+      </section>
       <div class="actions">
         <a class="lp-btn lp-btn-white lp-btn-lg" href="index.html">Back to home</a>
         <a class="lp-btn lp-btn-outline-light lp-btn-lg" href="index.html#how">How it works</a>
@@ -70,5 +115,6 @@
       <p><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>BloodLink is a prototype. Any real donation still goes through a hospital or blood bank's normal screening.</p>
     </div>
   </footer>
+  <script type="module" src="js/pages/thanks.js"></script>
 </body>
 </html>

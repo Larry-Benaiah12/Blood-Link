@@ -4,7 +4,7 @@
 //                     browser), so the UI works before the backend exists.
 // USE_MOCKS = false → real requests to Flask.
 
-import { getToken, clearSession } from "./auth.js";
+import { getToken, clearSession, loginPageFor } from "./auth.js";
 
 export const USE_MOCKS = true;
 
@@ -22,7 +22,7 @@ export class ApiError extends Error {
 }
 
 // Paths where a 401 means "wrong credentials", not "session expired".
-const NO_REDIRECT_ON_401 = ["/auth/login"];
+const NO_REDIRECT_ON_401 = ["/auth/login", "/auth/donor/login", "/auth/donor/register", "/auth/google"];
 
 async function request(method, path, body) {
   const token = getToken();
@@ -58,8 +58,9 @@ async function request(method, path, body) {
   }
 
   if (status === 401 && !NO_REDIRECT_ON_401.includes(path)) {
+    const page = loginPageFor();
     clearSession();
-    location.href = "login.html";
+    location.href = page;
     throw new ApiError("Your session has ended. Please log in again.", 401);
   }
 
@@ -77,3 +78,4 @@ async function request(method, path, body) {
 export const get = (path) => request("GET", path);
 export const post = (path, body = {}) => request("POST", path, body);
 export const patch = (path, body = {}) => request("PATCH", path, body);
+export const del = (path) => request("DELETE", path);

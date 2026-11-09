@@ -1,18 +1,13 @@
-import { post, USE_MOCKS } from "../api.js";
-import { getToken, saveSession } from "../auth.js";
+import { post } from "../api.js";
+import { saveSession, clearSession, homeFor } from "../auth.js";
 import { showAlert, clearAlert, setLoading, clearFieldErrors, showFieldErrors } from "../ui.js";
 
-// Already logged in? Go straight to the dashboard.
-if (getToken()) location.replace("dashboard.html");
+// Opening the login page always asks for credentials: any previous
+// session is ended so nobody can walk past the sign-in form.
+clearSession();
 
 const form = document.getElementById("login-form");
 const alertEl = document.getElementById("alert");
-
-if (USE_MOCKS) {
-  const hint = document.getElementById("demo-hint");
-  hint.textContent = "Demo mode: log in with demo@hospital.test and the password \"password\".";
-  hint.hidden = false;
-}
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -34,10 +29,10 @@ form.addEventListener("submit", async (event) => {
   const submit = form.querySelector('[type="submit"]');
   setLoading(submit, true, "Logging in…");
   try {
-    const { token, hospital } = await post("/auth/login", { email, password });
+    const { token, hospital, role } = await post("/auth/login", { email, password });
     if (!token) throw new Error("Login worked but no token came back. Please try again.");
-    saveSession(token, hospital);
-    location.href = "dashboard.html";
+    saveSession(token, hospital, role || "hospital");
+    location.href = homeFor(role || "hospital");
   } catch (err) {
     setLoading(submit, false);
     showFieldErrors(form, err.fields);

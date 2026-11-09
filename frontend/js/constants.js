@@ -34,3 +34,8 @@ export const COMPATIBLE_DONORS = {
 
 // Donors are eligible again this many days after their last donation.
 export const DONATION_GAP_DAYS = 90;
+
+// Donor IDs are sequential: DN0001, DN0002, … (more digits after DN9999).
+export function donorCode(id) {
+  return `DN${String(id).padStart(4, "0")}`;
+}
