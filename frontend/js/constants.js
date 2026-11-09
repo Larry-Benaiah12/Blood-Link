@@ -1,16 +1,13 @@
 // Shared constants and labels.
 
-// Values sent to / received from the API use ASCII "-".
 export const BLOOD_GROUPS = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
-// Display label: use a real minus sign so "A−" reads clearly.
-export function groupLabel(group) {
-  return String(group ?? "").replace("-", "−");
-}
+// Display label: a real minus sign so "A−" reads clearly.
+export const groupLabel = (group) => String(group ?? "").replace("-", "−");
 
 export const URGENCY = {
   critical: { label: "Critical", rank: 0 },
-  high: { label: "High", rank: 1 },
+  urgent: { label: "Urgent", rank: 1 },
   normal: { label: "Normal", rank: 2 },
 };
 
@@ -20,22 +17,11 @@ export const STATUS = {
   cancelled: { label: "Cancelled", rank: 2 },
 };
 
-// Which donor groups can give to each recipient group (red cells).
-export const COMPATIBLE_DONORS = {
-  "O-": ["O-"],
-  "O+": ["O-", "O+"],
-  "A-": ["O-", "A-"],
-  "A+": ["O-", "O+", "A-", "A+"],
-  "B-": ["O-", "B-"],
-  "B+": ["O-", "O+", "B-", "B+"],
-  "AB-": ["O-", "A-", "B-", "AB-"],
-  "AB+": ["O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+"],
-};
+// Region is free text on the backend and matched exactly, so always use this list.
+export const REGIONS = [
+  "Greater Accra", "Ashanti", "Western", "Western North", "Central", "Eastern",
+  "Volta", "Oti", "Northern", "Savannah", "North East", "Upper East",
+  "Upper West", "Bono", "Bono East", "Ahafo",
+];
 
-// Donors are eligible again this many days after their last donation.
-export const DONATION_GAP_DAYS = 90;
-
-// Donor IDs are sequential: DN0001, DN0002, … (more digits after DN9999).
-export function donorCode(id) {
-  return `DN${String(id).padStart(4, "0")}`;
-}
+export const PHONE_RE = /^(0\d{9}|\+233\d{9})$/;

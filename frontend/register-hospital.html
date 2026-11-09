@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register hospital · BloodLink</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#c62828">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="BloodLink">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="application-name" content="BloodLink">
+  <script src="js/pwa.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <script src="js/motion.js" defer></script>
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="auth">
+    <div class="auth-visual">
+      <img src="assets/img/step-hospital.jpg" alt="">
+      <p class="kicker">For hospitals</p>
+      <h1 data-split>Register your hospital</h1>
+      <p class="lead">Post blood requests and reach compatible donors in your region.</p>
+      <ul class="auth-points" data-stagger>
+        <li data-reveal="left"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Post what you need and how urgent it is</li>
+        <li data-reveal="left"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Available donors in your region are notified automatically</li>
+        <li data-reveal="left"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>An admin verifies your hospital after sign-up</li>
+      </ul>
+    </div>
+    <div class="auth-main">
+      <div class="auth-main-inner">
+        <div id="alert" class="alert" hidden></div>
+        <div id="app"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script type="module" src="js/pages/register-hospital.js"></script>
+</body>
+</html>

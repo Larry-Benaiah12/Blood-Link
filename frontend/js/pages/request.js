@@ -1,211 +1,94 @@
-import { get, post, patch } from "../api.js";
-import { requireLogin, bindLogout } from "../auth.js";
+import { get, patch } from "../api.js";
+import { requireRole } from "../auth.js";
+import { mountShell } from "../shell.js";
 import { URGENCY, groupLabel } from "../constants.js";
-import { h, badge, yesNoBadge, formatDate, showAlert, clearAlert, setLoading, loadingRow, emptyState } from "../ui.js";
+import { h, badge, formatDate, showAlert, clearAlert, setLoading, loadingRow, emptyState } from "../ui.js";
+import { setHeading } from "./parts.js";
+
+mountShell();
 
 const id = new URLSearchParams(location.search).get("id");
 const alertEl = document.getElementById("alert");
-const detailEl = document.getElementById("detail");
-const sectionEl = document.getElementById("matches-section");
-const matchesEl = document.getElementById("matches");
-const notifyBtn = document.getElementById("notify");
+const app = document.getElementById("app");
+let current = null;
 
-let current = null; // the request
-let matches = [];
-
-if (requireLogin()) init();
+if (requireRole("hospital")) init();
 
 async function init() {
-  bindLogout();
   if (!id) {
-    detailEl.replaceChildren(emptyState("No request selected."));
+    app.replaceChildren(emptyState("No request selected."));
     return;
   }
-
-  notifyBtn.addEventListener("click", notifyDonors);
-
+  app.replaceChildren(loadingRow("Loading request…"));
   try {
-    current = await get(`/requests/${encodeURIComponent(id)}`);
+    current = await get(`/api/requests/${encodeURIComponent(id)}`);
+    render();
   } catch (err) {
-    detailEl.replaceChildren();
+    app.replaceChildren();
     showAlert(alertEl, err.status === 404 ? "We couldn't find that request." : err.message);
-    return;
   }
-  renderSummary();
-  sectionEl.hidden = false;
-  await loadMatches();
 }
 
-// ---------- Summary ----------
-
-function renderSummary() {
+function render() {
   const r = current;
   const urgency = URGENCY[r.urgency]?.label || r.urgency;
-  document.title = `${groupLabel(r.blood_group)} · ${urgency} · BloodLink`;
+  document.title = `${groupLabel(r.blood_type)} · ${urgency} · BloodLink`;
+  setHeading(`${groupLabel(r.blood_type)} request`, `${r.units_needed} unit${r.units_needed === 1 ? "" : "s"} · ${urgency}`);
 
-  const items = [
-    ["Blood group", h("span", { class: "group-chip" }, groupLabel(r.blood_group))],
-    ["Units", String(r.units ?? "—")],
-    ["Urgency", badge(r.urgency)],
-    ["Status", badge(r.status)],
-  ];
-
-  const dl = h(
-    "dl",
-    { class: "summary" },
-    items.map(([label, value]) => h("div", {}, h("dt", {}, label), h("dd", {}, value))),
+  const dl = h("dl", { class: "summary" },
+    [["Blood type", h("span", { class: "group-chip" }, groupLabel(r.blood_type))],
+     ["Units", String(r.units_needed)], ["Urgency", badge(r.urgency)], ["Status", badge(r.status)]]
+      .map(([k, v]) => h("div", {}, h("dt", {}, k), h("dd", {}, v))),
     h("div", { class: "full" }, h("dt", {}, "Created"), h("dd", {}, formatDate(r.created_at))),
-    r.note ? h("div", { class: "full" }, h("dt", {}, "Note"), h("dd", { class: "note" }, r.note)) : null
-  );
+    r.note ? h("div", { class: "full" }, h("dt", {}, "Note"), h("dd", { class: "note" }, r.note)) : null);
 
-  const actions = h("div", { class: "actions", style: "margin-top: 16px" });
+  const actions = h("div", { class: "actions", style: "margin-top:16px" });
   if (r.status === "open") {
     actions.append(
       h("button", { type: "button", class: "btn btn-secondary", onclick: (e) => changeStatus(e.currentTarget, "fulfilled") }, "Mark fulfilled"),
       h("button", { type: "button", class: "btn btn-danger", onclick: (e) => changeStatus(e.currentTarget, "cancelled") }, "Cancel request")
     );
-  } else {
-    actions.append(
-      h("button", { type: "button", class: "btn btn-secondary", onclick: (e) => changeStatus(e.currentTarget, "open") }, "Reopen request")
-    );
   }
 
-  detailEl.replaceChildren(
-    h(
-      "div",
-      { class: "card" },
-      h("h1", {}, `${groupLabel(r.blood_group)} request`),
-      dl,
-      actions
-    )
+  app.replaceChildren(
+    h("div", { class: "card" }, dl, actions),
+    h("div", { class: "card", style: "margin-top:16px" }, h("h2", {}, `Donors who accepted (${current.accepted_donors?.length || 0})`), donorsTable(current.accepted_donors || []))
   );
-  updateNotifyButton();
 }
 
-const CONFIRM_TEXT = {
+function donorsTable(donors) {
+  if (!donors.length) return emptyState("No donors have accepted yet. Matching donors have been notified.");
+  return h("div", { class: "table-wrap" },
+    h("table", { class: "table" },
+      h("caption", { class: "visually-hidden" }, "Donors who accepted this request"),
+      h("thead", {}, h("tr", {},
+        ["Donor", "Blood type", "City", "Phone", "Accepted"].map((t) => h("th", { scope: "col" }, t)))),
+      h("tbody", {}, donors.map((d) =>
+        h("tr", {},
+          h("td", {}, d.full_name),
+          h("td", {}, h("span", { class: "group-chip" }, groupLabel(d.blood_type))),
+          h("td", {}, d.city),
+          h("td", {}, h("a", { href: `tel:${d.phone}` }, d.phone)),
+          h("td", {}, formatDate(d.accepted_at)))))));
+}
+
+const CONFIRM = {
   fulfilled: "Mark this request as fulfilled? Donors will no longer be asked to help.",
   cancelled: "Cancel this request? Donors will no longer be asked to help.",
-  open: "Reopen this request?",
-};
-
-const DONE_TEXT = {
-  fulfilled: "Request marked as fulfilled.",
-  cancelled: "Request cancelled.",
-  open: "Request reopened.",
 };
 
 async function changeStatus(btn, status) {
-  if (!confirm(CONFIRM_TEXT[status])) return;
+  if (!confirm(CONFIRM[status])) return;
   clearAlert(alertEl);
   setLoading(btn, true, "Saving…");
   try {
-    const updated = await patch(`/requests/${encodeURIComponent(id)}`, { status });
-    current = { ...current, ...(updated && typeof updated === "object" ? updated : {}), status };
-    renderSummary();
-    showAlert(alertEl, DONE_TEXT[status], "success");
+    await patch(`/api/requests/${encodeURIComponent(id)}/status`, { status });
+    current = { ...current, status };
+    render();
+    showAlert(alertEl, status === "fulfilled" ? "Request marked as fulfilled." : "Request cancelled.", "success");
   } catch (err) {
     setLoading(btn, false);
     showAlert(alertEl, err.message);
-  }
-}
-
-// ---------- Matches ----------
-
-async function loadMatches() {
-  matchesEl.replaceChildren(loadingRow("Finding matching donors…"));
-  try {
-    const data = await get(`/requests/${encodeURIComponent(id)}/matches`);
-    matches = (Array.isArray(data) ? data : data?.matches || []).slice();
-    matches.sort((a, b) => (a.distance_km ?? Infinity) - (b.distance_km ?? Infinity));
-    renderMatches();
-  } catch (err) {
-    matches = [];
-    matchesEl.replaceChildren();
-    showAlert(alertEl, err.message);
-  }
-  updateNotifyButton();
-}
-
-function formatKm(km) {
-  if (km == null || Number.isNaN(Number(km))) return "—";
-  const n = Number(km);
-  return `${n < 10 ? n.toFixed(1) : Math.round(n)} km`;
-}
-
-function renderMatches() {
-  if (!matches.length) {
-    matchesEl.replaceChildren(emptyState("No matching donors nearby yet."));
-    return;
-  }
-
-  // Only the fields below are ever rendered: no phone numbers.
-  const rows = matches.map((m) =>
-    h(
-      "tr",
-      {},
-      h("td", {}, m.first_name || "Donor"),
-      h("td", {}, h("span", { class: "group-chip" }, groupLabel(m.blood_group))),
-      h("td", { class: "num" }, formatKm(m.distance_km)),
-      h("td", {}, yesNoBadge(m.eligible, "Eligible", "Not yet")),
-      h("td", {}, yesNoBadge(m.notified, "Notified", "Not yet"))
-    )
-  );
-
-  matchesEl.replaceChildren(
-    h(
-      "div",
-      { class: "table-wrap" },
-      h(
-        "table",
-        { class: "table" },
-        h("caption", { class: "visually-hidden" }, "Matched donors, closest first"),
-        h(
-          "thead",
-          {},
-          h(
-            "tr",
-            {},
-            h("th", { scope: "col" }, "Donor"),
-            h("th", { scope: "col" }, "Blood group"),
-            h("th", { scope: "col", class: "num" }, "Distance"),
-            h("th", { scope: "col" }, "Eligible"),
-            h("th", { scope: "col" }, "Notified")
-          )
-        ),
-        h("tbody", {}, rows)
-      )
-    )
-  );
-}
-
-function updateNotifyButton() {
-  if (notifyBtn.getAttribute("aria-busy")) return;
-  const isOpen = current?.status === "open";
-  const pending = matches.filter((m) => m.eligible && !m.notified).length;
-  notifyBtn.disabled = !isOpen || pending === 0;
-  notifyBtn.title = !isOpen
-    ? "Only open requests can notify donors."
-    : pending === 0
-      ? "All eligible donors have already been notified."
-      : "";
-}
-
-async function notifyDonors() {
-  clearAlert(alertEl);
-  setLoading(notifyBtn, true, "Notifying…");
-  try {
-    const res = await post(`/requests/${encodeURIComponent(id)}/notify`);
-    setLoading(notifyBtn, false);
-    const n = res?.notified;
-    showAlert(
-      alertEl,
-      typeof n === "number" ? `Notified ${n} donor${n === 1 ? "" : "s"}.` : "Matched donors have been notified.",
-      "success"
-    );
-    await loadMatches();
-  } catch (err) {
-    setLoading(notifyBtn, false);
-    updateNotifyButton();
-    showAlert(alertEl, err.message);
+    if (err.status === 409) init(); // already closed elsewhere: refresh
   }
 }

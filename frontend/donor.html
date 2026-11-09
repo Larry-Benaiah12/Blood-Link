@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blood requests · BloodLink</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#c62828">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="BloodLink">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="application-name" content="BloodLink">
+  <script src="js/pwa.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/app.css">
+  <script src="js/motion.js" defer></script>
+</head>
+<body class="app-body">
+
+
+  <div class="app">
+    <aside id="sidebar" class="sidebar" aria-label="Sidebar"></aside>
+    <div id="overlay" class="overlay"></div>
+    <div class="app-main">
+      <header id="topbar" class="topbar"></header>
+      <main class="page">
+        <div class="page-head">
+          <div>
+            <h1 id="page-title">Requests near you</h1>
+            <p id="page-sub">Open requests that match your blood type and region.</p>
+          </div>
+        </div>
+        <div id="alert" class="alert" hidden></div>
+        <div id="app"></div>
+      </main>
+      <p class="app-foot">BloodLink is a prototype. Real donations still go through a hospital's normal screening.</p>
+    </div>
+  </div>
+  <script type="module" src="js/pages/donor.js"></script>
+</body>
+</html>

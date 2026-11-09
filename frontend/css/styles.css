@@ -1314,3 +1314,26 @@ main, .auth, .celebrate { animation: page-in .7s var(--ease-out) both; }
 .account-bar .who { display: flex; align-items: center; gap: 8px; min-width: 0; }
 .account-bar button { border: 0; background: none; color: var(--red-dark); font: inherit; font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 button.lp-link { background: none; border: 0; font: inherit; cursor: pointer; }
+
+/* ---- App additions ---- */
+.notif-link { position: relative; }
+.notif-count { display: inline-block; min-width: 18px; margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: var(--red); color: #fff; font-size: 0.7rem; font-weight: 700; text-align: center; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: var(--space); }
+.stat-tile { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.stat-tile b { display: block; font-size: 1.8rem; line-height: 1.1; }
+.stat-tile span { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.req-list { display: grid; gap: 14px; }
+.req-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 18px; display: grid; gap: 10px; }
+.req-card header { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.req-card .meta { color: var(--muted); font-size: 0.9rem; margin: 0; }
+.req-card .note { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+.req-card.is-unread { border-color: var(--red); }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: var(--space); }
+.toolbar .form-field { margin: 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--space); }
+.tabs a { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: #fff; text-decoration: none; color: inherit; font-weight: 600; }
+.tabs a[aria-current="page"] { background: var(--red); border-color: var(--red); color: #fff; }
+.bars { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.bars li { display: grid; grid-template-columns: 48px 1fr 36px; gap: 10px; align-items: center; }
+.bars i { display: block; height: 10px; border-radius: 6px; background: var(--red); min-width: 2px; }
+.switch-row { display: flex; align-items: center; gap: 10px; }
