@@ -1,103 +1,104 @@
-// Token storage + login guard. The session lives in sessionStorage, so it
-// ends when the browser tab / installed app is closed and the user has to
-// sign in again. Storage can throw (private mode, blocked storage), so every
-// access is wrapped and falls back to memory.
+// Token + user storage and route guards. The JWT lasts 24 h and there is no
+// refresh endpoint. Storage can throw (private mode), so every access is
+// wrapped and falls back to memory.
 
 const TOKEN_KEY = "bloodlink_token";
-const HOSPITAL_KEY = "bloodlink_hospital";
-const ROLE_KEY = "bloodlink_role";
+const USER_KEY = "bloodlink_user";
 const memory = {};
-
-// Remove sessions saved by older versions, which never expired.
-try {
-  [TOKEN_KEY, HOSPITAL_KEY, ROLE_KEY].forEach((k) => localStorage.removeItem(k));
-} catch { /* ignore */ }
 
 function read(key) {
   try {
-    return sessionStorage.getItem(key);
+    return localStorage.getItem(key);
   } catch {
     return memory[key] ?? null;
   }
 }
-
 function write(key, value) {
   try {
-    if (value == null) sessionStorage.removeItem(key);
-    else sessionStorage.setItem(key, value);
+    if (value == null) localStorage.removeItem(key);
+    else localStorage.setItem(key, value);
   } catch {
     if (value == null) delete memory[key];
     else memory[key] = value;
   }
 }
 
-export function getToken() {
-  return read(TOKEN_KEY);
-}
+export const getToken = () => read(TOKEN_KEY);
 
-/** role: "hospital" (default), "admin" or "donor". `hospital` holds the profile (hospital or donor account). */
-export function saveSession(token, hospital, role = "hospital") {
+export function saveSession(token, user) {
   write(TOKEN_KEY, token);
-  write(HOSPITAL_KEY, hospital ? JSON.stringify(hospital) : null);
-  write(ROLE_KEY, token ? role : null);
+  write(USER_KEY, user ? JSON.stringify(user) : null);
 }
 
-export function getRole() {
-  return read(ROLE_KEY) || "hospital";
-}
-
-/** Where each role lands after logging in. */
-export function homeFor(role = getRole()) {
-  if (role === "admin") return "admin.html";
-  if (role === "donor") return "donate.html";
-  return "dashboard.html";
-}
-
-/** Sign-in page for each role: donors have their own. */
-export function loginPageFor(role = getRole()) {
-  return role === "donor" ? "donor-login.html" : "login.html";
-}
-
-export function getHospital() {
+export function getUser() {
   try {
-    return JSON.parse(read(HOSPITAL_KEY) || "null");
+    return JSON.parse(read(USER_KEY) || "null");
   } catch {
     return null;
   }
 }
 
-/** The signed-in donor account (or hospital) saved with the session. */
-export const getProfile = getHospital;
+/** Update the cached user (e.g. after a profile edit). */
+export function saveUser(user) {
+  write(USER_KEY, user ? JSON.stringify(user) : null);
+}
+
+export const getRole = () => (getToken() ? getUser()?.role || null : null);
+export const getProfile = () => getUser()?.profile || null;
 
 export function clearSession() {
   write(TOKEN_KEY, null);
-  write(HOSPITAL_KEY, null);
-  write(ROLE_KEY, null);
+  write(USER_KEY, null);
 }
+
+export function homeFor(role = getRole()) {
+  if (role === "admin") return "admin.html";
+  if (role === "donor") return "donor.html";
+  if (role === "hospital") return "dashboard.html";
+  return "login.html";
+}
+
+export const loginPageFor = () => "login.html";
 
 /**
- * Redirect to the login page if there is no token, or to the right home page
- * if the signed-in role doesn't match. Returns true if the page may load.
+ * Redirect to login if signed out, or to the user's own home if their role
+ * isn't allowed here. Returns true if the page may load.
  */
-export function requireLogin(role = "hospital") {
-  const current = getToken() ? getRole() : null;
-  if (current === role) return true;
-  // Not signed in, or a donor/staff mix-up: go to the right sign-in page.
-  if (!current || role === "donor" || current === "donor") {
-    location.replace(loginPageFor(role));
+export function requireRole(...roles) {
+  const role = getRole();
+  if (!role) {
+    location.replace(loginPageFor());
     return false;
   }
-  location.replace(homeFor(current)); // hospital ↔ admin
-  return false;
+  if (roles.length && !roles.includes(role)) {
+    location.replace(homeFor(role));
+    return false;
+  }
+  return true;
 }
 
-/** Wire up any [data-logout] buttons on the page. */
-export function bindLogout() {
-  document.querySelectorAll("[data-logout]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const page = loginPageFor();
-      clearSession();
-      location.href = page;
-    });
-  });
+export function logout() {
+  clearSession();
+  location.href = loginPageFor();
+}
+
+// Email carried between the register / verify / reset screens. Kept in
+// sessionStorage (not the URL) so it isn't leaked in links or history.
+const PENDING_KEY = "bloodlink_pending_email";
+export function setPendingEmail(email) {
+  try { sessionStorage.setItem(PENDING_KEY, email); } catch { memory[PENDING_KEY] = email; }
+}
+export function getPendingEmail() {
+  try { return sessionStorage.getItem(PENDING_KEY) || ""; } catch { return memory[PENDING_KEY] || ""; }
+}
+
+// One-time notice shown on the next page (e.g. "Password updated").
+const FLASH_KEY = "bloodlink_flash";
+export function setFlash(msg) {
+  try { sessionStorage.setItem(FLASH_KEY, msg); } catch { memory[FLASH_KEY] = msg; }
+}
+export function takeFlash() {
+  let v = "";
+  try { v = sessionStorage.getItem(FLASH_KEY) || ""; sessionStorage.removeItem(FLASH_KEY); } catch { v = memory[FLASH_KEY] || ""; delete memory[FLASH_KEY]; }
+  return v;
 }

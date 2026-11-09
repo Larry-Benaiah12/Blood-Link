@@ -73,16 +73,25 @@ export function yesNoBadge(flag, yes = "Yes", no = "No") {
   return h("span", { class: `badge ${flag ? "badge-yes" : "badge-no"}` }, flag ? yes : no);
 }
 
+/** Backend timestamps are UTC but carry no timezone suffix: parse as UTC. */
+export function parseUtc(value) {
+  if (!value) return null;
+  const str = String(value);
+  const d = new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(str) ? str : `${str}Z`);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
 export function formatDate(value) {
+  const d = parseUtc(value);
+  if (!d) return value ? String(value) : "—";
+  return d.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
+/** Plain YYYY-MM-DD dates (no time, no timezone shift). */
+export function formatDay(value) {
   if (!value) return "—";
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return String(value);
-  return d.toLocaleString(undefined, {
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const d = new Date(`${value}T00:00:00`);
+  return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 }
 
 export function loadingRow(text = "Loading…") {
@@ -123,4 +132,63 @@ export function showFieldErrors(form, errors) {
   }
   first?.focus?.();
   return matched;
+}
+
+/**
+ * Build a .form-field. `options` (array of strings or [value, label]) makes a <select>.
+ */
+export function field({ label, name, type = "text", options, required = true, hint, optional, value, wrapClass = "", ...attrs }) {
+  const id = `f-${name}`;
+  let input;
+  if (options) {
+    input = h(
+      "select",
+      { id, name, required: required || null, ...attrs },
+      h("option", { value: "" }, "Choose…"),
+      options.map((o) => {
+        const [v, l] = Array.isArray(o) ? o : [o, o];
+        return h("option", { value: v }, l);
+      })
+    );
+  } else if (type === "textarea") {
+    input = h("textarea", { id, name, ...attrs });
+  } else {
+    input = h("input", { id, name, type, required: required || null, ...attrs });
+  }
+  if (value != null) input.value = value;
+  return h(
+    "div",
+    { class: `form-field ${wrapClass}`.trim() },
+    h("label", { for: id }, label, optional ? h("span", { class: "optional" }, " (optional)") : null),
+    input,
+    hint ? h("span", { class: "hint" }, hint) : null,
+    h("span", { class: "field-error", "data-error-for": name })
+  );
+}
+
+/** Run per-field checks (value => message | ""). Returns true if all pass. */
+export function validate(form, rules) {
+  clearFieldErrors(form);
+  const errors = {};
+  for (const [name, check] of Object.entries(rules)) {
+    const msg = check(form.elements[name].value.trim());
+    if (msg) errors[name] = msg;
+  }
+  if (Object.keys(errors).length) {
+    showFieldErrors(form, errors);
+    return false;
+  }
+  return true;
+}
+
+/** Short-lived toast message. */
+export function toast(message, type = "success") {
+  let box = document.getElementById("toasts");
+  if (!box) {
+    box = h("div", { id: "toasts", style: "position:fixed;right:16px;bottom:16px;z-index:50;display:grid;gap:8px;max-width:min(360px,calc(100vw - 32px))" });
+    document.body.append(box);
+  }
+  const el = h("div", { class: `alert alert-${type}`, role: "status", style: "margin:0" }, message);
+  box.append(el);
+  setTimeout(() => el.remove(), 4500);
 }
