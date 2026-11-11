@@ -211,3 +211,14 @@ body.app-body {
   .form-grid { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .sidebar, .switch::after { transition: none; } }
+
+/* ---- downloads, menu, delete ---- */
+.form-actions-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+.btn svg { width: 1em; height: 1em; margin-right: 6px; vertical-align: -0.125em; }
+.toolbar-spacer { flex: 1; }
+.menu { position: relative; display: inline-block; }
+.menu-list { position: absolute; right: 0; top: calc(100% + 4px); z-index: 20; min-width: 170px; background: #fff; border: 1px solid #d8cec5; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,.12); padding: 4px; }
+.menu-list[hidden] { display: none; }
+.menu-item { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 9px 12px; border-radius: 6px; font: inherit; cursor: pointer; }
+.menu-item:hover, .menu-item:focus-visible { background: #fbf8f5; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 6px; }
