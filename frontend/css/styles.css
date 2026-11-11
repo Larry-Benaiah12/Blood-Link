@@ -120,7 +120,7 @@ a { color: var(--red-dark); text-underline-offset: 3px; }
   color: var(--ink);
   text-decoration: none;
 }
-.lp-brand .icon { color: var(--red); width: 22px; height: 22px; fill: var(--red); stroke: none; }
+.lp-brand .icon, .lp-brand .ico { flex: none; color: var(--red); width: 22px; height: 22px; fill: var(--red); stroke: none; }
 .lp-nav { display: flex; align-items: center; gap: 8px; }
 .lp-link {
   position: relative;
@@ -1287,28 +1287,6 @@ main, .auth, .celebrate { animation: page-in .7s var(--ease-out) both; }
 .auth-tab { min-height: 42px; border: 0; border-radius: 999px; background: transparent; font: inherit; font-weight: 600; color: var(--muted); cursor: pointer; transition: background-color .2s, color .2s, box-shadow .2s; }
 .auth-tab[aria-selected="true"] { background: #fff; color: var(--ink); box-shadow: 0 2px 8px rgba(122, 20, 20, .12); }
 .auth-tab:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
-.google-block { display: grid; justify-items: center; gap: 10px; }
-.google-btn-slot { width: 100%; display: flex; justify-content: center; min-height: 0; }
-.google-btn-slot:empty { display: none; }
-.google-btn {
-  width: 100%; min-height: 48px;
-  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-  border: 1px solid #dadce0; border-radius: 999px; background: #fff;
-  font: inherit; font-weight: 600; color: #3c4043; cursor: pointer;
-  transition: background-color .2s, box-shadow .2s;
-}
-.google-btn:hover { background: #f8faff; box-shadow: 0 1px 3px rgba(60, 64, 67, .25); }
-.google-btn:focus-visible { outline: 2px solid #1a73e8; outline-offset: 2px; }
-.google-btn svg { width: 20px; height: 20px; flex: none; }
-.google-note { display: flex; gap: 6px; align-items: flex-start; margin: 0; font-size: .85rem; color: var(--muted); }
-.google-note .icon { width: 16px; height: 16px; flex: none; margin-top: 2px; color: var(--success); }
-.or-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--muted); font-size: .85rem; }
-.or-divider::before, .or-divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-.google-demo { width: min(420px, calc(100% - 32px)); border: 0; border-radius: 18px; padding: 24px; box-shadow: 0 24px 60px rgba(0, 0, 0, .3); }
-.google-demo::backdrop { background: rgba(26, 5, 5, .55); }
-.google-demo h2 { margin: 0 0 6px; font-size: 1.25rem; }
-.google-demo .muted { margin: 0 0 16px; font-size: .9rem; }
-.google-demo-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
 .account-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; padding: 10px 14px; background: var(--cream); border-radius: 12px; font-size: .92rem; }
 .account-bar img { width: 28px; height: 28px; border-radius: 50%; }
 .account-bar .who { display: flex; align-items: center; gap: 8px; min-width: 0; }
@@ -1337,3 +1315,17 @@ button.lp-link { background: none; border: 0; font: inherit; cursor: pointer; }
 .bars li { display: grid; grid-template-columns: 48px 1fr 36px; gap: 10px; align-items: center; }
 .bars i { display: block; height: 10px; border-radius: 6px; background: var(--red); min-width: 2px; }
 .switch-row { display: flex; align-items: center; gap: 10px; }
+
+/* Continue with Google: our look, Google's invisible button on top */
+.google-wrap { margin-top: 18px; display: flex; flex-direction: column; }
+.or-divider { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; color: var(--muted); font-size: .85rem; }
+.or-divider::before, .or-divider::after { content: ""; flex: 1; height: 1px; background: currentColor; opacity: .25; }
+.google-btn { position: relative; width: 100%; max-width: 400px; height: 40px; align-self: center; }
+.google-look {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: #fff; border: 1.5px solid var(--border); border-radius: 999px;
+  font-weight: 600; font-size: .95rem; color: var(--ink); transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.google-look svg { width: 18px; height: 18px; flex: none; }
+.google-btn:hover .google-look { background: #faf5f5; border-color: var(--red); box-shadow: 0 4px 14px -8px rgba(122, 20, 20, .45); }
+.google-real { position: absolute; inset: 0; display: flex; justify-content: center; overflow: hidden; opacity: .01; cursor: pointer; }

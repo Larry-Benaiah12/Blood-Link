@@ -9,7 +9,7 @@
 //
 // Bump VERSION whenever you deploy changes so installed apps pick them up.
 
-const VERSION = "v10";
+const VERSION = "v11";
 const PRECACHE = `bloodlink-precache-${VERSION}`;
 const RUNTIME = `bloodlink-runtime-${VERSION}`;
 
@@ -64,6 +64,7 @@ const APP_SHELL = [
   "js/pages/hospital-profile.js",
   "js/pages/notifications.js",
   "js/pages/admin.js",
+  "js/google.js",
   "assets/icons/icon-192.png",
   "assets/icons/icon-512.png",
   "assets/icons/maskable-192.png",

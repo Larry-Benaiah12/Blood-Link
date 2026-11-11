@@ -8,6 +8,7 @@ if (getRole()) location.replace(homeFor());
 mountShell();
 
 mountRegister({
+  role: "hospital",
   title: "Register your hospital",
   intro: "An admin verifies new hospitals. You can post requests straight away.",
   fields: [
