@@ -8,6 +8,7 @@ if (getRole()) location.replace(homeFor());
 mountShell();
 
 mountRegister({
+  role: "donor",
   title: "Create your donor account",
   intro: "You'll only see requests that match your blood type and region.",
   fields: [

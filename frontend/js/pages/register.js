@@ -4,6 +4,7 @@ import { post } from "../api.js";
 import { setPendingEmail } from "../auth.js";
 import { h, showAlert, clearAlert, setLoading, validate } from "../ui.js";
 import { PHONE_RE } from "../constants.js";
+import { mountGoogle } from "../google.js";
 
 const SLOW_HINT = "Waking up the server — the first request can take up to a minute. Thanks for waiting…";
 
@@ -21,7 +22,7 @@ export const baseRules = {
  * Mounts a registration form. Registers, then goes to the email
  * verification screen (the API returns no token until the email is verified).
  */
-export function mountRegister({ title, intro, fields, rules, build, switchLink }) {
+export function mountRegister({ title, intro, fields, rules, build, switchLink, role }) {
   const alertEl = document.getElementById("alert");
   const form = h(
     "form",
@@ -31,6 +32,7 @@ export function mountRegister({ title, intro, fields, rules, build, switchLink }
     fields,
     h("button", { type: "submit", class: "btn btn-primary btn-block lp-btn-lg" }, "Create account")
   );
+  mountGoogle({ container: form, alertEl, role });
   document.getElementById("app").append(form, h("p", { class: "auth-switch" }, ...switchLink));
 
   form.addEventListener("submit", async (event) => {

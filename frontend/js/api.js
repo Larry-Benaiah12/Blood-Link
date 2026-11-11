@@ -5,16 +5,17 @@ import { API_BASE, REQUEST_TIMEOUT_MS } from "./config.js";
 import { getToken, clearSession, loginPageFor } from "./auth.js";
 
 export class ApiError extends Error {
-  constructor(message, status = 0, code = null) {
+  constructor(message, status = 0, code = null, data = null) {
     super(message);
     this.name = "ApiError";
     this.status = status;
-    this.code = code; // e.g. "email_not_verified"
+    this.code = code; // e.g. "email_not_verified", "registration_required"
+    this.data = data; // full JSON error body (e.g. email/name on registration_required)
   }
 }
 
 // A 401 from these means "wrong credentials", not "session expired".
-const NO_REDIRECT_ON_401 = ["/api/auth/login"];
+const NO_REDIRECT_ON_401 = ["/api/auth/login", "/api/auth/google"];
 
 async function request(method, path, body, asBlob = false) {
   const token = getToken();
@@ -67,7 +68,7 @@ async function request(method, path, body, asBlob = false) {
         : res.status >= 500
           ? "Something went wrong on our side. Please try again."
           : `Request failed (${res.status}).`);
-    throw new ApiError(message, res.status, data?.code || null);
+    throw new ApiError(message, res.status, data?.code || null, data);
   }
   return fileBlob ?? data;
 }

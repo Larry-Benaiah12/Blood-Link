@@ -1,6 +1,7 @@
 import { post } from "../api.js";
 import { saveSession, getRole, homeFor, setPendingEmail, takeFlash } from "../auth.js";
 import { mountShell } from "../shell.js";
+import { mountGoogle } from "../google.js";
 import { h, field, showAlert, clearAlert, setLoading, validate } from "../ui.js";
 
 if (getRole()) location.replace(homeFor());
@@ -21,10 +22,13 @@ const form = h(
   h("p", { style: "margin:-4px 0 14px;text-align:right" }, h("a", { href: "forgot-password.html" }, "Forgot password?")),
   h("button", { type: "submit", class: "btn btn-primary btn-block lp-btn-lg" }, "Log in")
 );
-document.getElementById("app").append(
+const app = document.getElementById("app");
+app.append(
   form,
   h("p", { class: "auth-switch" }, "New here? ", h("a", { href: "register-donor.html" }, "Become a donor"), " or ", h("a", { href: "register-hospital.html" }, "register a hospital"))
 );
+
+mountGoogle({ container: form, alertEl });
 
 form.addEventListener("submit", async (event) => {
   event.preventDefault();

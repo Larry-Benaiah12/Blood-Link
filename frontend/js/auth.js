@@ -79,6 +79,8 @@ export function requireRole(...roles) {
 
 export function logout() {
   clearSession();
+  // Stop Google silently signing the user straight back in.
+  try { window.google?.accounts?.id?.disableAutoSelect?.(); } catch {}
   location.href = loginPageFor();
 }
 

@@ -1337,3 +1337,9 @@ button.lp-link { background: none; border: 0; font: inherit; cursor: pointer; }
 .bars li { display: grid; grid-template-columns: 48px 1fr 36px; gap: 10px; align-items: center; }
 .bars i { display: block; height: 10px; border-radius: 6px; background: var(--red); min-width: 2px; }
 .switch-row { display: flex; align-items: center; gap: 10px; }
+
+/* Continue with Google */
+.google-wrap { margin-top: 18px; }
+.google-btn { display: flex; justify-content: center; min-height: 44px; }
+.or-divider { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; color: var(--muted); font-size: .85rem; }
+.or-divider::before, .or-divider::after { content: ""; flex: 1; height: 1px; background: currentColor; opacity: .25; }
