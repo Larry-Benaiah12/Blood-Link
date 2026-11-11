@@ -16,7 +16,7 @@ export class ApiError extends Error {
 // A 401 from these means "wrong credentials", not "session expired".
 const NO_REDIRECT_ON_401 = ["/api/auth/login"];
 
-async function request(method, path, body) {
+async function request(method, path, body, asBlob = false) {
   const token = getToken();
   const headers = { Accept: "application/json" };
   if (body !== undefined) headers["Content-Type"] = "application/json";
@@ -42,7 +42,9 @@ async function request(method, path, body) {
     clearTimeout(timer);
   }
 
-  const text = await res.text();
+  // Successful file downloads are returned as a Blob; errors are always JSON.
+  const fileBlob = asBlob && res.ok ? await res.blob() : null;
+  const text = fileBlob ? "" : await res.text();
   let data = null;
   try {
     data = text ? JSON.parse(text) : null;
@@ -67,13 +69,16 @@ async function request(method, path, body) {
           : `Request failed (${res.status}).`);
     throw new ApiError(message, res.status, data?.code || null);
   }
-  return data;
+  return fileBlob ?? data;
 }
 
 export const get = (path) => request("GET", path);
 export const post = (path, body = {}) => request("POST", path, body);
 export const put = (path, body = {}) => request("PUT", path, body);
 export const patch = (path, body) => request("PATCH", path, body);
+export const del = (path) => request("DELETE", path);
+/** GET a file (PDF/DOCX/XLSX) with the bearer token; resolves to a Blob. */
+export const getBlob = (path) => request("GET", path, undefined, true);
 
 /** Fire-and-forget ping so a sleeping Render instance starts waking up. */
 export function wakeApi() {

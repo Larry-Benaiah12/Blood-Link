@@ -9,7 +9,7 @@
 //
 // Bump VERSION whenever you deploy changes so installed apps pick them up.
 
-const VERSION = "v9";
+const VERSION = "v10";
 const PRECACHE = `bloodlink-precache-${VERSION}`;
 const RUNTIME = `bloodlink-runtime-${VERSION}`;
 
@@ -40,6 +40,7 @@ const APP_SHELL = [
   "js/motion.js",
   "js/config.js",
   "js/api.js",
+  "js/files.js",
   "js/auth.js",
   "js/constants.js",
   "js/ui.js",

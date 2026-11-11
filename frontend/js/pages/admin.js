@@ -1,4 +1,5 @@
 import { get, patch } from "../api.js";
+import { reportMenu, deleteUser } from "../files.js";
 import { requireRole, getUser } from "../auth.js";
 import { mountShell } from "../shell.js";
 import { BLOOD_GROUPS, REGIONS, groupLabel } from "../constants.js";
@@ -77,6 +78,28 @@ function activeButton(profile, rerender) {
   return btn;
 }
 
+// Permanent, irreversible delete. Hidden for admin accounts and for yourself.
+function deleteButton(profile, name, list, rerender, { isHospital = false } = {}) {
+  if (profile.role === "admin" || profile.user_id === me?.id) return null;
+  const btn = h("button", { type: "button", class: "btn btn-danger" }, icon("trash"), "Delete");
+  btn.addEventListener("click", async () => {
+    const msg = `Permanently delete ${name}? This cannot be undone. Use Deactivate if you may want to restore this account.` +
+      (isHospital ? " All of its blood requests will also be deleted." : "");
+    if (!confirm(msg)) return;
+    setLoading(btn, true, "Deleting…");
+    try {
+      await deleteUser(profile.user_id);
+      list.splice(list.indexOf(profile), 1);
+      toast(`${name} deleted.`);
+      rerender();
+    } catch (err) {
+      setLoading(btn, false);
+      showAlert(alertEl, err.message);
+    }
+  });
+  return btn;
+}
+
 const statusBadge = (active) => h("span", { class: `badge ${active ? "badge-yes" : "badge-no"}` }, active ? "Active" : "Deactivated");
 
 // ---------- Donors ----------
@@ -85,7 +108,9 @@ async function donors(body) {
   const filters = h("form", { class: "toolbar" },
     field({ label: "Blood type", name: "blood_type", options: BLOOD_GROUPS.map((g) => [g, groupLabel(g)]), required: false }),
     field({ label: "Region", name: "region", options: REGIONS, required: false }),
-    h("button", { type: "submit", class: "btn btn-primary" }, "Filter"));
+    h("button", { type: "submit", class: "btn btn-primary" }, "Filter"),
+    h("span", { class: "toolbar-spacer" }),
+    reportMenu("donors", () => ({ blood_type: filters.elements.blood_type.value, region: filters.elements.region.value }), alertEl));
   const results = h("div", {}, loadingRow("Loading donors…"));
   body.replaceChildren(filters, results);
 
@@ -107,7 +132,7 @@ async function donors(body) {
                 h("td", {}, formatDay(d.last_donation_date)),
                 h("td", {}, h("span", { class: `badge ${d.is_available ? "badge-yes" : "badge-no"}` }, d.is_available ? "Yes" : "No")),
                 h("td", {}, statusBadge(d.is_active)),
-                h("td", {}, activeButton(d, draw)))))
+                h("td", {}, h("div", { class: "row-actions" }, activeButton(d, draw), deleteButton(d, d.full_name, list, draw))))))
           : emptyState("No donors match these filters."));
       draw();
     } catch (err) {
@@ -123,7 +148,10 @@ async function donors(body) {
 
 async function hospitals(body) {
   const list = await get("/api/admin/hospitals");
-  const draw = () => body.replaceChildren(
+  const bar = h("div", { class: "toolbar" }, h("span", { class: "toolbar-spacer" }), reportMenu("hospitals", () => ({}), alertEl));
+  const content = h("div", {});
+  body.replaceChildren(bar, content);
+  const draw = () => content.replaceChildren(
     list.length
       ? table("Hospitals", ["Hospital", "Region / city", "Contact", "Verification", "Status", ""],
           list.map((x) => {
@@ -146,7 +174,7 @@ async function hospitals(body) {
               h("td", {}, h("div", {}, x.email), h("a", { href: `tel:${x.phone}` }, x.phone)),
               h("td", {}, x.is_verified ? verifiedBadge(true) : verify),
               h("td", {}, statusBadge(x.is_active)),
-              h("td", {}, activeButton(x, draw)));
+              h("td", {}, h("div", { class: "row-actions" }, activeButton(x, draw), deleteButton(x, x.name, list, draw, { isHospital: true }))));
           }))
       : emptyState("No hospitals have registered yet."));
   draw();
@@ -157,7 +185,9 @@ async function hospitals(body) {
 async function requests(body) {
   const filters = h("form", { class: "toolbar" },
     field({ label: "Status", name: "status", options: [["open", "Open"], ["fulfilled", "Fulfilled"], ["cancelled", "Cancelled"]], required: false }),
-    h("button", { type: "submit", class: "btn btn-primary" }, "Filter"));
+    h("button", { type: "submit", class: "btn btn-primary" }, "Filter"),
+    h("span", { class: "toolbar-spacer" }),
+    reportMenu("requests", () => ({ status: filters.elements.status.value }), alertEl));
   const results = h("div", {}, loadingRow("Loading requests…"));
   body.replaceChildren(filters, results);
 

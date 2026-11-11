@@ -1,6 +1,7 @@
 import { get, post, put } from "../api.js";
 import { requireRole, getProfile, getUser, saveUser } from "../auth.js";
 import { mountShell } from "../shell.js";
+import { donorFormActions } from "../files.js";
 import { icon } from "../icons.js";
 import { h, showAlert, clearAlert, loadingRow, toast, formatDay } from "../ui.js";
 import { groupLabel } from "../constants.js";
@@ -10,6 +11,7 @@ mountShell();
 
 const alertEl = document.getElementById("alert");
 const app = document.getElementById("app");
+app.before(donorFormActions(alertEl));
 const GAP_DAYS = 90; // advisory only: the backend doesn't enforce a donation gap
 let profile = getProfile();
 let requests = [];
